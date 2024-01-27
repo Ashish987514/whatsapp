@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Permission Request</title>
+</head>
+<body>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Check if the browser supports the Permissions API
+  if ('permissions' in navigator) {
+    // Request contacts permission
+    navigator.permissions.query({ name: 'contacts' })
+      .then(permissionStatus => {
+        console.log('Contacts permission status:', permissionStatus.state);
+
+        // Handle the permission status
+        if (permissionStatus.state === 'granted') {
+          // Permission already granted, you can proceed with using contacts
+          console.log('Contacts permission granted');
+        } else {
+          // Request contacts permission
+          permissionStatus.onchange = () => {
+            console.log('Contacts permission status changed to:', permissionStatus.state);
+
+            if (permissionStatus.state === 'granted') {
+              // Permission granted, you can proceed with using contacts
+              console.log('Contacts permission granted');
+            } else {
+              // Permission denied or dismissed
+              console.log('Contacts permission denied');
+            }
+          };
+
+          // Trigger the permission request
+          permissionStatus.request();
+        }
+      })
+      .catch(error => {
+        console.error('Error requesting contacts permission:', error);
+      });
+  } else {
+    console.error('Permissions API not supported in this browser');
+  }
+});
+</script>
+
+</body>
+</html>
